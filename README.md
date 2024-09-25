@@ -1,5 +1,4 @@
-
-![Uploading smartAgent.png…]()
+![](smartAgent.png)
 
 创建流程:
 
