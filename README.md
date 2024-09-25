@@ -1,4 +1,4 @@
-根据您提供的架构图,以下是部署文档的创建流程:
+创建流程:
 
 1. **AWS Bedrock Agent 部署**
    - 在 AWS 账户中创建一个新的 AWS Bedrock 项目
