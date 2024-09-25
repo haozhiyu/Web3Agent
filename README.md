@@ -1,3 +1,6 @@
+
+![Uploading smartAgent.png…]()
+
 创建流程:
 
 1. **AWS Bedrock Agent 部署**
