@@ -1,4 +1,4 @@
-![](smartAgent.png)
+![](smartAgent_v2.png)
 
 创建流程:
 
