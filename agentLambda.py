@@ -15,6 +15,9 @@ accessor_token = ""
 #Your Address 发送方账户的公钥
 from_address = ""
 
+vitalikaddr = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+
+
 #Your private key name stored in Secret manager
 secret_name = "eth_pri_key"
 
