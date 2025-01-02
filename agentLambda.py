@@ -116,6 +116,10 @@ def lambda_handler(event, context):
 
         
     def getBalance(address):
+
+        # 检查是否为 ENS 域名，如果是则解析
+        if address.endswith('.eth'):
+            address = resolve_ens(address)
         
         balance = w3.eth.get_balance(address)
 
