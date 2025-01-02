@@ -41,8 +41,17 @@ def lambda_handler(event, context):
     
     def sendtx(receiver,amount):
         
-        print(receiver)
+        print(f"Original receiver: {receiver}")
+        
+        # 检查是否为 ENS 域名，如果是则解析
+        resolved_address = resolve_ens(receiver)
+        if resolved_address:
+            receiver = resolved_address
+        
+        print(f"Final receiver address: {receiver}")
+
         sender_private_key = get_secret()
+
         # 定义交易参数
         transaction = {
                 'from': from_address,
@@ -226,6 +235,27 @@ def lambda_handler(event, context):
         secret_key = get_secret_value_response['SecretString']
         
         return secret_key
+
+    #检查是否为ens域名，是则执行解析
+    def resolve_ens(ens_name):
+        try:
+            # Check if the name is a valid ENS name
+            if not ens_name.endswith('.eth'):
+                return None  # Not an ENS name, return None
+
+            # Resolve the ENS name to an Ethereum address
+            address = w3.ens.address(ens_name)
+            
+            if address is None:
+                print(f"The ENS name {ens_name} is not registered or does not have an address set.")
+                return None
+            else:
+                print(f"The address for {ens_name} is: {address}")
+                return address
+        
+        except Exception as e:
+            print(f"An error occurred while resolving ENS: {e}")
+            return None
         
         
     
