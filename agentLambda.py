@@ -156,68 +156,51 @@ def lambda_handler(event, context):
                 return f"No data found for {coin}"
         else:
             return f"Error: {response.status_code} - {response.text}"
-    
-    #计算九神指数
+
     def investAdviceMetric():
-        
-        birth_date = datetime(year=2009, month=1, day=3)
-        today = datetime.now()
-        age_days = (today - birth_date).days
-        
-        target_price = 10 ** (5.84 * log10(age_days) - 17.01)
-        
-        print('target_price:', target_price)
-        
-        start_date = datetime.now() - timedelta(days=200) 
-        # 使用CoinGecko API获取比特币的历史价格数据 
-        url = f"https://api.coingecko.com/api/v3/coins/bitcoin/history?date={start_date.strftime('%d-%m-%Y')}" 
+        url = "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=365&interval=daily"
         headers = {
-                    "accept": "application/json",
-                    "x-cg-demo-api-key":coingecko_pri_key
-                }
-                
-        response = requests.get(url,  headers=headers)
-        data = response.json() 
-        # 计算200天平均价格 
-        price_sum = 0 
-        for i in range(200): 
-            price_sum += data["market_data"]["current_price"]["usd"] 
-        average_200_day_price = price_sum / 200 
+            "accept": "application/json",
+            "x-cg-demo-api-key": coingecko_pri_key
+        }
+        
+        response = requests.get(url, headers=headers)
+        data = response.json()
+        
+        prices = [price[1] for price in data['prices']]
+        current_price = prices[-1]
+        all_time_high = max(prices)  # 注意：这现在是 365 天内的最高价，而不是历史最高价
+        
+        # 计算200天移动平均线（如果有足够的数据）
+        ma_200 = sum(prices[-200:]) / min(200, len(prices))
+        
+        # 计算简易比特币周期指数
+        ath_ratio = current_price / all_time_high
+        ma_ratio = current_price / ma_200
+        
+        sbci = (ath_ratio + ma_ratio) / 2
             
-        cur_price_url = 'https://api.coindesk.com/v1/bpi/currentprice/USD.json'
-        response = requests.get(cur_price_url, allow_redirects=True)
-        cur_price = response.json()["bpi"]["USD"]["rate_float"]
-        print('current price:', cur_price)
-        
-        p1 = cur_price / target_price
-        p2 = cur_price / average_200_day_price
-        p = p1 * p2
-        print()
-        print('all-in range: <=0.45')
-        print('DCA range: 0.45 ~ 1.20')
-        print('Sell range: >= 5.0')
-        print()
-        
-        # Before a bull run, stop DCA when >=3.0
-        # After a bull run, start DCA when <= 1.2
-        print('ahr_999_index:', '{:.2f}'.format(p))
-        
-        if p <= 0.45:
-            print('  Suggestion: ALL IN!')
-            return 'Now the price is the lowest in history cycles, I recommend you to ALL in'
-        elif p <= 1.20:
-            print('  Suggestion: Dollar cost averaging.')
-            return 'Now the price is relatively low in history cycles, I recommend you to keep buying regularly'
-
-        elif p < 5.0:
-            print('  Suggestion: Stop buying.')
-            return 'Now the price is relatively high in history cycles, I recommend you to stop buying'
-
-        elif p >= 5.0:
-            print('  Suggestion: Sell some BTC to secure some fiat for daily spending.')
-            return 'Now the price is very high in history cycles, I recommend you to sell it all now'
-
-        
+        print(f"Current Price: ${current_price:.2f}")
+        print(f"All Time High: ${all_time_high:.2f}")
+        print(f"200-day Moving Average: ${ma_200:.2f}")
+        print(f"Simple Bitcoin Cycle Index: {sbci:.2f}")
+        print("Index ranges:")
+        print("0.00 - 0.25: Extremely Undervalued")
+        print("0.25 - 0.50: Undervalued")
+        print("0.50 - 0.75: Fair Value")
+        print("0.75 - 1.00: Overvalued")
+        print("1.00+: Extremely Overvalued")
+            
+        if sbci <= 0.25:
+            return "The market appears extremely undervalued. Consider a significant investment, but be aware of potential further downside."
+        elif sbci <= 0.50:
+            return "The market appears undervalued. This might be a good opportunity for dollar-cost averaging or increasing your position."
+        elif sbci <= 0.75:
+            return "The market seems to be around fair value. Hold your current position and continue to monitor the market."
+        elif sbci <= 1.00:
+            return "The market appears overvalued. Consider taking some profits or reducing your position."
+        else:
+            return "The market appears extremely overvalued. This might be a good time to take significant profits."
     
     #从Secret Manager获取私钥
     def get_secret():
