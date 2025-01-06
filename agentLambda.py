@@ -75,7 +75,7 @@ def lambda_handler(event, context):
             # 处理异常
             print(f"Error sending transaction: {e}")
             return "余额不足，发送失败"
-        # 你可以在这里添加其他错误处理逻辑,如记录错误、重试等
+       
         else:
             # 交易成功发送
             print(f"Transaction sent with hash: {tx_hash.hex()}")
@@ -169,9 +169,9 @@ def lambda_handler(event, context):
         
         prices = [price[1] for price in data['prices']]
         current_price = prices[-1]
-        all_time_high = max(prices)  # 注意：这现在是 365 天内的最高价，而不是历史最高价
+        all_time_high = max(prices)  #365 天内的最高价，而不是历史最高价
         
-        # 计算200天移动平均线（如果有足够的数据）
+        # 计算200天移动平均线
         ma_200 = sum(prices[-200:]) / min(200, len(prices))
         
         # 计算简易比特币周期指数
