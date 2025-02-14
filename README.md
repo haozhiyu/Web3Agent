@@ -1,4 +1,4 @@
-![](smartAgent_v4.png)
+
 AI-powered Web3 agents have arrived!
 
 As Web3 and generative AI technologies continue to rapidly evolve, building practical applications that combine these technologies presents a number of technical challenges. This blog demonstrates how to construct the fundamental building blocks of a Web3 AI Agent using AWS services. We'll show you how to leverage AWS Secret Manager as the agent's wallet, integrate generative AI capabilities, and implement other essential features to create a functional Web3 AI Agent.
@@ -55,9 +55,10 @@ When user asks questions ,search answers in the attached knowledge base first an
 If user asks the price of a certain coin, call getCryptoPrice action group and send it the lowercase letter english name of that crypto, DO NOT use dialoge memory to answer.If customer asking you advice about whether he should buy crypto now, you can use investAdviceMetric Agent to calculate the trend and get a answer, then you can polish the answer and send it to user.If user asks about Gas，call estimateGas Agent.
 
 In this prompt, we need to define that the LLM is a Web3 assistant and it needs to understand user’s question and call the related functions.  Every function should be declared here in order for the Nova model to know what function could be utilized.
-
+![](/img/1.png)
 
 1. Create an Action Group to enable your agent to coordinate various activities. The Action Group invokes one or more Amazon Lambda functions to carry out these actions such as obtaining data, and submitting transactions. You can select an existing Lambda function you have created, or select “Quick create a new Lambda function”. After the Lambda function is created, you can modify it as needed. In this case, the demo code is in ourpublic repository:
+![](/img/2.png)
 
 Attention: If you choose Select an existing Lambda function, remember to give the function a permission using below command:
 
@@ -73,12 +74,14 @@ The flow typically works like this:
     * These parameters are then passed to the Lambda function, which executes the requested action.
 
 This structure ensures that our AI assistant can perform complex tasks by breaking them down into predefined actions with clear input requirements.
+![](/img/3.png)
 
 In this agent-initiated transaction process, which involves operating the user's wallet, we should enable a confirmation action groupfor optimal security. This will prompt the user for a second confirmation, providing an additional layer of safety and ensuring the transaction aligns with the user's intentions.
- 
+ ![](/img/4.png)
 
+![](/img/5.png)
 
-
+![](/img/6.png)
 
 1. Blockchain interaction:
 
@@ -161,9 +164,9 @@ c. For Vector store, choose Amazon Opensearch Serverless
 d. Choose Next.
 
 * Review the details and choose Create knowledge base.
-* 
+* ![](/img/7.png)
 * Once it has been successfully created, we need to sync the data source
-* 
+![](/img/8.png)
 
 The entire architecture achieves functional connectivity and data flow through API calls, ensuring the real-time and scalability of the system. Each request of the user will be understood by AI, and then the corresponding agent function will be called to complete the specific business logic.
 
@@ -172,32 +175,32 @@ The entire architecture achieves functional connectivity and data flow through A
 Demo
 
 1. Use Nova pro model to parse token names and convert them into token codes to obtain real-time prices of corresponding tokens on the exchange
+![](/img/9.png)
 
 
 
+2. Retrieve corresponding real-time Gas Fees
+![](/img/10.png)
 
-1. Retrieve corresponding real-time Gas Fees
-
-
-1. Based on AMB, agent can obtain real-time on-chain balance with ENS domain.
-
+3. Based on AMB, agent can obtain real-time on-chain balance with ENS domain.
+![](/img/11.png)
 You can switch to your own wallet to confirm:
+![](/img/12.png)
 
 
+4. Based on investment advice algorithms, the AI assistant can provide real-time recommendations on whether the current price is worth buying or not based on the current price.
+![](/img/13.png)
 
-1. Based on investment advice algorithms, the AI assistant can provide real-time recommendations on whether the current price is worth buying or not based on the current price.
 
-
-
-1. Utilize Nova Pro to understand user intent and extract key information such as addresses and transfer amounts. This data is then passed to a back-end agent, which calls the Polygon API to execute on-chain transactions.
-
+5. Utilize Nova Pro to understand user intent and extract key information such as addresses and transfer amounts. This data is then passed to a back-end agent, which calls the Polygon API to execute on-chain transactions.
+![](/img/14.png)
 
 Once the agent completes execution, transaction status becomes viewable on the blockchain explorer.
+![](/img/15.png)
 
 
-
-1. Near real-time web3 news and data, helping investors or end users quickly obtain new market trends. This function serves as a centralized search platform, allowing users to access Web3-related information from various sources through a single interface, eliminating the need to search across different websites.
-
+6. Near real-time web3 news and data, helping investors or end users quickly obtain new market trends. This function serves as a centralized search platform, allowing users to access Web3-related information from various sources through a single interface, eliminating the need to search across different websites.
+![](/img/17.png)
 
 Moreover, the potential use cases of Web3 & AI integration extend far beyond these functionalities. For example, letting Agents automatically issue Meme tokens, create funny NFTs, and even design and deploy contracts directly on-chain, along with many other interesting scenarios. This solution just serves as a foundation for imagining and developing more practical features and products. 
 
