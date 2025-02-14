@@ -23,7 +23,7 @@ We will demonstrate how to create these fundamental building blocks in the conte
 * Near Real-time Web3 News and Data Aggregation
 
 Technical Implementation
-
+![](/img/architecture.png)
 Workflow:
 
 1. Users submit requests through their devices, passing through authentication and filter
